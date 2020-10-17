@@ -5,6 +5,8 @@ import java.util.Scanner;
 public class Main {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
+		
+		int lastArticleId = 0;
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -17,12 +19,14 @@ public class Main {
 				String title = scanner.nextLine();
 				System.out.printf("내용 : ");
 				String body = scanner.nextLine();
-				int id = 1;
+				int id = lastArticleId + 1;
 				
 				System.out.println("== 생성된 게시물 정보 ==");
-				System.out.println("번호 : " + id);
-				System.out.println("제목 : " + title);
-				System.out.println("내용 : " + body);
+				System.out.printf("번호 : %d\n" , id);
+				System.out.printf("제목 : %s\n" , title);
+				System.out.printf("내용 : %s\n" , body);
+				
+				lastArticleId = id;
 				
 			} else if (command.equals("article list")) {
 				System.out.println("== 게시물 리스트 ==");
