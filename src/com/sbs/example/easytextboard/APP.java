@@ -25,9 +25,6 @@ public class APP {
 
 	public void run() {
 
-		for (int i = 0; i < articles.length; i++) {
-			articles[i] = new Article();
-		}
 		Scanner scanner = new Scanner(System.in);
 
 		int maxArticlesCount = articles.length;
@@ -53,11 +50,13 @@ public class APP {
 
 				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 
-				Article article = getArticle(id);
+				Article article = new Article();
 
 				article.id = id;
 				article.title = title;
 				article.body = body;
+				
+				articles[articlesSize] = article;
 				
 				articlesSize++;
 
