@@ -7,6 +7,11 @@ public class APP {
 	Article[] articles = new Article[10];
 
 	int lastArticleId = 0;
+	int articlesSize = 0;
+	
+	int articlesSize() {
+		return articlesSize;
+	}
 
 	public Article getArticle(int id) {
 		if (id < 1) {
@@ -34,7 +39,7 @@ public class APP {
 			if (command.equals("article add")) {
 				System.out.println("== 게시물 등록 ==");
 
-				if (lastArticleId >= maxArticlesCount) {
+				if (articlesSize() >= maxArticlesCount) {
 					System.out.println("더 이상 작성할 수 없습니다.");
 					continue;
 				}
@@ -53,11 +58,13 @@ public class APP {
 				article.id = id;
 				article.title = title;
 				article.body = body;
+				
+				articlesSize++;
 
 			} else if (command.equals("article list")) {
 				System.out.println("== 게시물 리스트 ==");
 
-				if (lastArticleId == 0) {
+				if (articlesSize() == 0) {
 					System.out.println("게시물이 없습니다");
 					continue;
 				}
