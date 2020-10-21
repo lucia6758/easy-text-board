@@ -41,6 +41,23 @@ public class APP {
 		} 
 		articlesSize--;
 	}
+	
+	private int add(String title, String body) {
+		
+		Article article = new Article();
+
+		article.id = lastArticleId + 1;
+		article.title = title;
+		article.body = body;
+		
+		lastArticleId = article.id;
+
+		articles[articlesSize] = article;
+
+		articlesSize++;
+		
+		return article.id;
+	}
 
 	public void run() {
 
@@ -60,24 +77,14 @@ public class APP {
 					continue;
 				}
 
-				int id = lastArticleId + 1;
-				lastArticleId = id;
 				System.out.printf("제목 : ");
 				String title = scanner.nextLine();
 				System.out.printf("내용 : ");
 				String body = scanner.nextLine();
+				
+				int id = add(title, body);
 
 				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
-
-				Article article = new Article();
-
-				article.id = id;
-				article.title = title;
-				article.body = body;
-
-				articles[articlesSize] = article;
-
-				articlesSize++;
 
 			} else if (command.equals("article list")) {
 				System.out.println("== 게시물 리스트 ==");
