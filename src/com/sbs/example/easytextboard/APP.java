@@ -4,22 +4,28 @@ import java.util.Scanner;
 
 public class APP {
 
-	Article article1 = new Article();
-	Article article2 = new Article();
+	Article[] articles = new Article[10];
+
+	int lastArticleId = 0;
 
 	public Article getArticle(int id) {
-		if (id == 1) {
-			return article1;
-		} else if (id == 2) {
-			return article2;
+		if (id < 1) {
+			return null;
 		}
-		return null;
+		if (id > lastArticleId) {
+			return null;
+		}
+		return articles[id - 1];
 	}
 
 	public void run() {
+
+		for (int i = 0; i < articles.length; i++) {
+			articles[i] = new Article();
+		}
 		Scanner scanner = new Scanner(System.in);
 
-		int lastArticleId = 0;
+		int maxArticlesCount = articles.length;
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -28,15 +34,18 @@ public class APP {
 			if (command.equals("article add")) {
 				System.out.println("== 게시물 등록 ==");
 
+				if (lastArticleId >= maxArticlesCount) {
+					System.out.println("더 이상 작성할 수 없습니다.");
+					continue;
+				}
+				
+				int id = lastArticleId + 1;
+				lastArticleId = id;
 				System.out.printf("제목 : ");
 				String title = scanner.nextLine();
 				System.out.printf("내용 : ");
 				String body = scanner.nextLine();
-				int id = lastArticleId + 1;
 
-				System.out.println("== 생성된 게시물 정보 ==");
-				System.out.printf("제목 : %s\n", title);
-				System.out.printf("내용 : %s\n", body);
 				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 
 				Article article = getArticle(id);
@@ -44,8 +53,6 @@ public class APP {
 				article.id = id;
 				article.title = title;
 				article.body = body;
-
-				lastArticleId = id;
 
 			} else if (command.equals("article list")) {
 				System.out.println("== 게시물 리스트 ==");
@@ -68,7 +75,7 @@ public class APP {
 
 				Article article = getArticle(inputedId);
 
-				if (lastArticleId == 0 || inputedId > lastArticleId) {
+				if (article == null) {
 					System.out.printf("%d번 게시물이 존재하지 않습니다.\n", inputedId);
 					continue;
 				}
