@@ -2,9 +2,9 @@ package com.sbs.example.easytextboard;
 
 import java.util.Scanner;
 
-public class APP {
+public class App {
 
-	private Article[] articles = new Article[5];
+	private Article[] articles = new Article[3];
 
 	private int lastArticleId = 0;
 	private int articlesSize = 0;
@@ -31,45 +31,52 @@ public class APP {
 		}
 		return -1;
 	}
-	
+
 	private void removeArticle(int id) {
 		int index = getIndexById(id);
-		if ( index != -1 ){
-			for (int i = index+1; i < articlesSize(); i++) {
-				articles[i-1] = articles [i];
+		if (index != -1) {
+			for (int i = index + 1; i < articlesSize(); i++) {
+				articles[i - 1] = articles[i];
 			}
-		} 
+		}
 		articlesSize--;
 	}
-	
+
 	private int add(String title, String body) {
-		
+
+		if (articlesSize == articles.length) {
+			Article[] newArticles = new Article[articles.length * 2];
+
+			for (int i = 0; i < articles.length; i++) {
+				newArticles[i] = articles[i];
+			}
+			articles = newArticles;
+		}
+
 		Article article = new Article();
 
 		article.id = lastArticleId + 1;
 		article.title = title;
 		article.body = body;
-		
+
 		lastArticleId = article.id;
 
 		articles[articlesSize] = article;
 
 		articlesSize++;
-		
+
 		return article.id;
 	}
-	
+
 	private void modify(int inputedId, String title, String body) {
 		Article article = getArticle(inputedId);
 		article.title = title;
-		article.body = body;		
+		article.body = body;
 	}
 
 	public void run() {
 
 		Scanner scanner = new Scanner(System.in);
-
-		int maxArticlesCount = articles.length;
 
 		while (true) {
 			System.out.printf("명령어) ");
@@ -78,16 +85,11 @@ public class APP {
 			if (command.equals("article add")) {
 				System.out.println("== 게시물 등록 ==");
 
-				if (articlesSize() >= maxArticlesCount) {
-					System.out.println("더 이상 작성할 수 없습니다.");
-					continue;
-				}
-
 				System.out.printf("제목 : ");
 				String title = scanner.nextLine();
 				System.out.printf("내용 : ");
 				String body = scanner.nextLine();
-				
+
 				int id = add(title, body);
 
 				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
@@ -132,7 +134,7 @@ public class APP {
 					System.out.printf("%d번 게시물이 존재하지 않습니다.\n", inputedId);
 					continue;
 				}
-				
+
 				removeArticle(inputedId);
 
 				System.out.printf("%d번 게시물이 삭제되었습니다.\n", inputedId);
@@ -152,13 +154,12 @@ public class APP {
 				String title = scanner.nextLine();
 				System.out.printf("내용 : ");
 				String body = scanner.nextLine();
-				
+
 				modify(inputedId, title, body);
-				
+
 				System.out.printf("%d번 게시물이 수정되었습니다.\n", inputedId);
 
-			}
-			else if (command.equals("system exit")) {
+			} else if (command.equals("system exit")) {
 				System.out.println("== 프로그램 종료 ==");
 				break;
 			} else {
