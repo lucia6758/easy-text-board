@@ -4,10 +4,20 @@ import java.util.Scanner;
 
 public class App {
 
-	private Article[] articles = new Article[3];
+	private Article[] articles;
 
-	private int lastArticleId = 0;
-	private int articlesSize = 0;
+	private int lastArticleId;
+	private int articlesSize;
+	
+	public void init() {
+		articles = new Article[32];
+		lastArticleId = 0;
+		articlesSize =0;
+		
+		for (int i = 1; i <= 32; i++) {
+			add("제목" + i, "내용" + i);
+		}
+	}
 
 	private int articlesSize() {
 		return articlesSize;
