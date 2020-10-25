@@ -8,12 +8,12 @@ public class App {
 
 	private int lastArticleId;
 	private int articlesSize;
-	
+
 	public App() {
 		articles = new Article[32];
 		lastArticleId = 0;
-		articlesSize =0;
-		
+		articlesSize = 0;
+
 		for (int i = 1; i <= 32; i++) {
 			add("제목" + i, "내용" + i);
 		}
@@ -104,16 +104,32 @@ public class App {
 
 				System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 
-			} else if (command.equals("article list")) {
-				System.out.println("== 게시물 리스트 ==");
+			} else if (command.startsWith("article list ")) {
+				int page = Integer.parseInt(command.split(" ")[2]);
+				System.out.printf("== 게시물 리스트 %d==\n", page);
 
 				if (articlesSize() == 0) {
-					System.out.println("게시물이 없습니다");
+					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
+				
+				int articlesInAPage = 10;
+				int startPos = articlesSize() - 1;
+				startPos -= (page - 1) * articlesInAPage;
+				int endPos = startPos - (articlesInAPage - 1);
+				
+				if (startPos < 0) {
+					System.out.printf("%d페이지는 존재하지 않습니다.\n", page);
+					continue;
+				}
+				
 				System.out.println("번호 / 제목");
 
-				for (int i = articlesSize() - 1; i >= 0; i--) {
+				for (int i = startPos; i >= endPos; i--) {
+					if (i < 0) {
+						continue;
+					}
+
 					Article article = articles[i];
 
 					System.out.printf("%d / %s\n", article.id, article.title);
