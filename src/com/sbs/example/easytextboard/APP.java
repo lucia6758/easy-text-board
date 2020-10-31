@@ -108,21 +108,25 @@ public class App {
 				int page = Integer.parseInt(command.split(" ")[2]);
 				System.out.printf("== 게시물 리스트 %d==\n", page);
 
+				if (page <= 1) {
+					page = 1;
+				}
+
 				if (articlesSize() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
-				
+
 				int articlesInAPage = 10;
 				int startPos = articlesSize() - 1;
 				startPos -= (page - 1) * articlesInAPage;
 				int endPos = startPos - (articlesInAPage - 1);
-				
+
 				if (startPos < 0) {
 					System.out.printf("%d페이지는 존재하지 않습니다.\n", page);
 					continue;
 				}
-				
+
 				System.out.println("번호 / 제목");
 
 				for (int i = startPos; i >= endPos; i--) {
@@ -185,7 +189,69 @@ public class App {
 
 				System.out.printf("%d번 게시물이 수정되었습니다.\n", inputedId);
 
-			} else if (command.equals("system exit")) {
+			} else if (command.startsWith("article search ")) {
+				String[] commandBits = command.split(" ");
+				String searchKeyword = commandBits[2];
+
+				int page = 1;
+
+				if (commandBits.length >= 4) {
+					page = Integer.parseInt(commandBits[3]);
+				}
+
+				if (page <= 1) {
+					page = 1;
+				}
+
+				System.out.println("== 게시물 검색 ==");
+
+				int searchResultArticleLen = 0;
+				for (Article article : articles) {
+					if (article.title.contains(searchKeyword)) {
+						searchResultArticleLen++;
+					}
+				}
+
+				Article[] searchResultArticles = new Article[searchResultArticleLen];
+
+				int searchResultArticlesIndex = 0;
+				for (Article article : articles) {
+					if (article.title.contains(searchKeyword)) {
+						searchResultArticles[searchResultArticlesIndex] = article;
+						searchResultArticlesIndex++;
+					}
+				}
+
+				if (searchResultArticles.length == 0) {
+					System.out.println("일치하는 게시물이 없습니다.");
+					continue;
+				}
+
+				System.out.println("번호 / 제목");
+
+				int articlesInAPage = 10;
+				int startPos = searchResultArticles.length - 1;
+				startPos -= (page - 1) * articlesInAPage;
+				int endPos = startPos - (articlesInAPage - 1);
+
+				if (startPos < 0) {
+					System.out.printf("%d페이지는 존재하지 않습니다.\n", page);
+					continue;
+				}
+
+				for (int i = startPos; i >= endPos; i--) {
+					if (i < 0) {
+						continue;
+					}
+
+					Article article = searchResultArticles[i];
+
+					System.out.printf("%d / %s\n", article.id, article.title);
+				}
+			}
+
+			else if (command.equals("system exit")) {
+
 				System.out.println("== 프로그램 종료 ==");
 				break;
 			} else {
