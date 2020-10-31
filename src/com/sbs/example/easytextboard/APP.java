@@ -1,26 +1,23 @@
 package com.sbs.example.easytextboard;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class App {
 
-	private Article[] articles;
+	private List<Article> articles;
 
 	private int lastArticleId;
 	private int articlesSize;
 
 	public App() {
-		articles = new Article[32];
+		articles = new ArrayList<>();
 		lastArticleId = 0;
-		articlesSize = 0;
 
 		for (int i = 1; i <= 32; i++) {
 			add("제목" + i, "내용" + i);
 		}
-	}
-
-	private int articlesSize() {
-		return articlesSize;
 	}
 
 	private Article getArticle(int id) {
@@ -30,12 +27,12 @@ public class App {
 			return null;
 		}
 
-		return articles[index];
+		return articles.get(index);
 	}
 
 	private int getIndexById(int id) {
-		for (int i = 0; i < articlesSize(); i++) {
-			if (articles[i].id == id) {
+		for (int i = 0; i < articles.size(); i++) {
+			if (articles.get(i).id == id) {
 				return i;
 			}
 		}
@@ -44,36 +41,23 @@ public class App {
 
 	private void removeArticle(int id) {
 		int index = getIndexById(id);
-		if (index != -1) {
-			for (int i = index + 1; i < articlesSize(); i++) {
-				articles[i - 1] = articles[i];
-			}
+		if (index == -1) {
+			return;
 		}
-		articlesSize--;
+		articles.remove(index);
 	}
 
 	private int add(String title, String body) {
-
-		if (articlesSize == articles.length) {
-			Article[] newArticles = new Article[articles.length * 2];
-
-			for (int i = 0; i < articles.length; i++) {
-				newArticles[i] = articles[i];
-			}
-			articles = newArticles;
-		}
 
 		Article article = new Article();
 
 		article.id = lastArticleId + 1;
 		article.title = title;
 		article.body = body;
+		
+		articles.add(article);
 
 		lastArticleId = article.id;
-
-		articles[articlesSize] = article;
-
-		articlesSize++;
 
 		return article.id;
 	}
@@ -112,13 +96,13 @@ public class App {
 					page = 1;
 				}
 
-				if (articlesSize() == 0) {
+				if (articles.size() == 0) {
 					System.out.println("게시물이 존재하지 않습니다.");
 					continue;
 				}
 
 				int articlesInAPage = 10;
-				int startPos = articlesSize() - 1;
+				int startPos = articles.size() - 1;
 				startPos -= (page - 1) * articlesInAPage;
 				int endPos = startPos - (articlesInAPage - 1);
 
@@ -134,7 +118,7 @@ public class App {
 						continue;
 					}
 
-					Article article = articles[i];
+					Article article = articles.get(i);
 
 					System.out.printf("%d / %s\n", article.id, article.title);
 				}
@@ -207,6 +191,10 @@ public class App {
 
 				int searchResultArticleLen = 0;
 				for (Article article : articles) {
+					if (article == null) {
+						break;
+					}
+
 					if (article.title.contains(searchKeyword)) {
 						searchResultArticleLen++;
 					}
@@ -216,6 +204,10 @@ public class App {
 
 				int searchResultArticlesIndex = 0;
 				for (Article article : articles) {
+					if (article == null) {
+						break;
+					}
+
 					if (article.title.contains(searchKeyword)) {
 						searchResultArticles[searchResultArticlesIndex] = article;
 						searchResultArticlesIndex++;
