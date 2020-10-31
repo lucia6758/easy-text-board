@@ -7,13 +7,15 @@ import java.util.Scanner;
 public class App {
 
 	private List<Article> articles;
-
 	private int lastArticleId;
-	private int articlesSize;
+	private List<Member> members;
+	private int lastMemberId;
 
 	public App() {
 		articles = new ArrayList<>();
 		lastArticleId = 0;
+		members = new ArrayList<>();
+		lastMemberId = 0;
 
 		for (int i = 1; i <= 32; i++) {
 			add("제목" + i, "내용" + i);
@@ -54,7 +56,7 @@ public class App {
 		article.id = lastArticleId + 1;
 		article.title = title;
 		article.body = body;
-		
+
 		articles.add(article);
 
 		lastArticleId = article.id;
@@ -66,6 +68,22 @@ public class App {
 		Article article = getArticle(inputedId);
 		article.title = title;
 		article.body = body;
+	}
+	
+	private int join(String userId, String userPw, String userName) {
+		Member member = new Member();
+
+		member.id = lastMemberId + 1;
+		member.userId = userId;
+		member.userPw = userPw;
+		member.userName = userName;
+
+		members.add(member);
+
+		lastMemberId = member.id;
+
+		return member.id;
+	
 	}
 
 	public void run() {
@@ -240,6 +258,19 @@ public class App {
 
 					System.out.printf("%d / %s\n", article.id, article.title);
 				}
+			} else if (command.equals("member join")) {
+				System.out.println("== 회원가입 ==");
+
+				System.out.printf("아이디 : ");
+				String userId = scanner.nextLine();
+				System.out.printf("비밀번호 : ");
+				String userPw = scanner.nextLine();
+				System.out.printf("이름 : ");
+				String userName = scanner.nextLine();
+
+				int id = join(userId, userPw, userName);
+
+				System.out.printf("%d번 회원으로 가입되었습니다.\n", id);
 			}
 
 			else if (command.equals("system exit")) {
