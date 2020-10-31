@@ -20,7 +20,7 @@ public class App {
 
 			if (command.startsWith("article ")) {
 				articleController.run(scanner, command);
-			} else if (command.equals("member join")) {
+			} else if (command.startsWith("member ")) {
 				memberController.run(scanner, command);
 			}
 
