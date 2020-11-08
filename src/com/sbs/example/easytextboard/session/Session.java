@@ -7,4 +7,8 @@ public class Session {
 		return loginedMemberId != 0;
 	}
 
+	public boolean isLogout() {
+		return !isLogined();
+	}
+
 }

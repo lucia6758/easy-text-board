@@ -44,10 +44,10 @@ public class MemberController extends Controller {
 		}
 		return true;
 	}
-	
+
 	private Member getMemberByUserId(String userId) {
-		for(Member member : members) {
-			if(member.userId.equals(userId)) {
+		for (Member member : members) {
+			if (member.userId.equals(userId)) {
 				return member;
 			}
 		}
@@ -120,19 +120,19 @@ public class MemberController extends Controller {
 
 		} else if (command.equals("member login")) {
 			System.out.println("== 로그인 ==");
-			
-			if(Container.session.isLogined()) {
+
+			if (Container.session.isLogined()) {
 				System.out.println("이미 로그인된 상태입니다.");
 				return;
 			}
-			
+
 			int tryCount = 0;
 			int maxTryCount = 3;
 			boolean userIdIsValid = false;
 			boolean userPwIsValid = false;
 			String userId = "";
-			String userPw="";
-			
+			String userPw = "";
+
 			Member member = null;
 
 			while (true) {
@@ -147,10 +147,10 @@ public class MemberController extends Controller {
 				if (userId.length() == 0) {
 					tryCount++;
 					continue;
-				} 
-				
+				}
+
 				member = getMemberByUserId(userId);
-				
+
 				if (member == null) {
 					tryCount++;
 					System.out.println("존재하지 않는 아이디입니다.");
@@ -164,7 +164,7 @@ public class MemberController extends Controller {
 			if (userIdIsValid == false) {
 				return;
 			}
-			
+
 			while (true) {
 				if (tryCount >= maxTryCount) {
 					System.out.println("다음에 다시 시도해주십시오.");
@@ -176,9 +176,9 @@ public class MemberController extends Controller {
 
 				if (userPw.length() == 0) {
 					continue;
-				} 
-				
-				if(member.userPw.equals(userPw)==false) {
+				}
+
+				if (member.userPw.equals(userPw) == false) {
 					tryCount++;
 					System.out.println("비밀번호가 일치하지않습니다.");
 					continue;
@@ -191,11 +191,19 @@ public class MemberController extends Controller {
 			if (userPwIsValid == false) {
 				return;
 			}
-			
+
 			System.out.printf("%s님 로그인되었습니다.\n", member.userName);
-			
+
 			Container.session.loginedMemberId = member.id;
 
+		} else if (command.equals("member whoami")) {
+			if (Container.session.isLogout()) {
+				System.out.println("로그아웃 상태입니다.");
+				return;
+			}
+
+			int loginedMemberId = Container.session.loginedMemberId;
+			System.out.printf("당신의 회원번호는 %d번 입니다.\n", loginedMemberId);
 		}
 	}
 
