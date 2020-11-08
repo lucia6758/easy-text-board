@@ -16,7 +16,7 @@ public class ArticleController {
 		lastArticleId = 0;
 
 		for (int i = 1; i <= 32; i++) {
-			add("제목" + i, "내용" + i);
+			add(i % 2 == 0 ? 1 : 2, "제목" + i, "내용" + i);
 		}
 	}
 
@@ -47,11 +47,12 @@ public class ArticleController {
 		articles.remove(index);
 	}
 
-	private int add(String title, String body) {
+	private int add(int memberId, String title, String body) {
 
 		Article article = new Article();
 
 		article.id = lastArticleId + 1;
+		article.memberId = memberId;
 		article.title = title;
 		article.body = body;
 
@@ -70,7 +71,7 @@ public class ArticleController {
 
 	public void run(Scanner scanner, String command) {
 		if (command.equals("article add")) {
-			if ( Container.session.isLogout() ) {
+			if (Container.session.isLogout()) {
 				System.out.println("로그인 후 작성할 수 있습니다.");
 				return;
 			}
@@ -81,7 +82,7 @@ public class ArticleController {
 			System.out.printf("내용 : ");
 			String body = scanner.nextLine();
 
-			int id = add(title, body);
+			int id = add(Container.session.loginedMemberId, title, body);
 
 			System.out.printf("%d번 게시물이 생성되었습니다.\n", id);
 
@@ -108,7 +109,7 @@ public class ArticleController {
 				return;
 			}
 
-			System.out.println("번호 / 제목");
+			System.out.println("번호 / 작성자 / 제목");
 
 			for (int i = startPos; i >= endPos; i--) {
 				if (i < 0) {
@@ -117,7 +118,7 @@ public class ArticleController {
 
 				Article article = articles.get(i);
 
-				System.out.printf("%d / %s\n", article.id, article.title);
+				System.out.printf("%d / %d / %s\n", article.id, article.memberId, article.title);
 			}
 
 		} else if (command.startsWith("article detail ")) {
@@ -136,7 +137,7 @@ public class ArticleController {
 			System.out.printf("내용 : %s\n", article.body);
 
 		} else if (command.startsWith("article delete ")) {
-			if ( Container.session.isLogout() ) {
+			if (Container.session.isLogout()) {
 				System.out.println("로그인 후 삭제할 수 있습니다.");
 				return;
 			}
@@ -155,7 +156,7 @@ public class ArticleController {
 			System.out.printf("%d번 게시물이 삭제되었습니다.\n", inputedId);
 
 		} else if (command.startsWith("article modify ")) {
-			if ( Container.session.isLogout() ) {
+			if (Container.session.isLogout()) {
 				System.out.println("로그인 후 수정할 수 있습니다.");
 				return;
 			}
