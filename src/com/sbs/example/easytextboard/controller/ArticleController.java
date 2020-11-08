@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.sbs.example.easytextboard.container.Container;
 import com.sbs.example.easytextboard.dto.Article;
 
 public class ArticleController {
@@ -69,6 +70,10 @@ public class ArticleController {
 
 	public void run(Scanner scanner, String command) {
 		if (command.equals("article add")) {
+			if ( Container.session.isLogout() ) {
+				System.out.println("로그인 후 작성할 수 있습니다.");
+				return;
+			}
 			System.out.println("== 게시물 등록 ==");
 
 			System.out.printf("제목 : ");
@@ -131,6 +136,10 @@ public class ArticleController {
 			System.out.printf("내용 : %s\n", article.body);
 
 		} else if (command.startsWith("article delete ")) {
+			if ( Container.session.isLogout() ) {
+				System.out.println("로그인 후 삭제할 수 있습니다.");
+				return;
+			}
 			System.out.println("== 게시물 삭제 ==");
 			int inputedId = Integer.parseInt(command.split(" ")[2]);
 
@@ -146,6 +155,10 @@ public class ArticleController {
 			System.out.printf("%d번 게시물이 삭제되었습니다.\n", inputedId);
 
 		} else if (command.startsWith("article modify ")) {
+			if ( Container.session.isLogout() ) {
+				System.out.println("로그인 후 수정할 수 있습니다.");
+				return;
+			}
 			System.out.println("== 게시물 수정 ==");
 			int inputedId = Integer.parseInt(command.split(" ")[2]);
 
